@@ -21,8 +21,9 @@ SeaDuke	SeaDuke uses an event filter in WMI code to execute a previously dropped
             - 20
             - 21 selection:
      
-2。 sysmon，  EventID: 7
+2. sysmon，  EventID: 7
         Image: 'C:\Windows\System32\wbem\WmiPrvSE.exe'
         ImageLoaded: 'wbemcons.dll'
-3。  sysmon，EventID: 11
+        
+3.  sysmon，EventID: 11
 Image: 'C:\WINDOWS\system32\wbem\scrcons.exe'
