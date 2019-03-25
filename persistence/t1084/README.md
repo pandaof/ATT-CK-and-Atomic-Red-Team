@@ -29,6 +29,8 @@ SeaDuke	SeaDuke uses an event filter in WMI code to execute a previously dropped
         
 3.  sysmon，EventID: 11 and Image: 'C:\WINDOWS\system32\wbem\scrcons.exe'
 
+4  Sysmon ，Event Id： 1 and ParentImage 包含 C:\Windows\System32\svchost.exe AND Image 包含 C:\WINDOWS\system32\wbem\scrcons.exe. 
+
 
 参考：
 https://www.eideon.com/2018-03-02-THL03-WMIBackdoors/
