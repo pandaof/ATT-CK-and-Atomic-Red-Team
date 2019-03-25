@@ -16,8 +16,39 @@ SeaDuke	SeaDuke uses an event filter in WMI code to execute a previously dropped
 
 
 检测方法：
+
+设置sysmon config文件
+<!--SYSMON EVENT ID 19,20,21 : WMIEvent-->
+<WmiEvent onmatch="include">
+	<Operation condition="is">Created</Operation>
+</WmiEvent>
+
 1. sysmon 日志，EventID: 19 or 20 or 21
      
 2. sysmon，  EventID: 7 and Image: 'C:\Windows\System32\wbem\WmiPrvSE.exe' and   ImageLoaded: 'wbemcons.dll'
         
 3.  sysmon，EventID: 11 and Image: 'C:\WINDOWS\system32\wbem\scrcons.exe'
+
+
+参考：
+https://www.eideon.com/2018-03-02-THL03-WMIBackdoors/
+
+atomic red team：
+
+powershell脚本
+
+$FilterArgs = @{name='AtomicRedTeam-WMIPersistence-Example';
+                EventNameSpace='root\CimV2';
+                QueryLanguage="WQL";
+                Query="SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System' AND TargetInstance.SystemUpTime >= 240 AND TargetInstance.SystemUpTime < 325"};
+$Filter=New-CimInstance -Namespace root/subscription -ClassName __EventFilter -Property $FilterArgs
+
+$ConsumerArgs = @{name='AtomicRedTeam-WMIPersistence-Example';
+                CommandLineTemplate="$($Env:SystemRoot)\System32\notepad.exe";}
+$Consumer=New-CimInstance -Namespace root/subscription -ClassName CommandLineEventConsumer -Property $ConsumerArgs
+
+$FilterToConsumerArgs = @{
+Filter = [Ref] $Filter;
+Consumer = [Ref] $Consumer;
+}
+$FilterToConsumerBinding = New-CimInstance -Namespace root/subscription -ClassName __FilterToConsumerBinding -Property $FilterToConsumerArgs
